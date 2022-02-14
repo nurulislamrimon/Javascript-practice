@@ -1,54 +1,36 @@
-// calculation function
-function productPriceCalculator(inputId, isIncrement, rateId, isMobile) {
-    const inputField = document.getElementById(inputId);
-    if (isIncrement) {
-        inputField.value++;
+const randomNumber = getPin();
+function getPin() {
+    const createRandomNumber = Math.round(Math.random() * 10000);
+    if (createRandomNumber > 1000) {
+        return createRandomNumber;
+    } else {
+        return getPin();
     }
-    else if (inputField.value > 0) {
-        inputField.value--
-    }
-    const inputValue = inputField.value;
-    const productPrice = document.getElementById(rateId);
-    if (isMobile) {
-        var totalProductsPrice = inputValue * 1219;
+}
+
+document.querySelector(".generate-btn").addEventListener("click", function () {
+    const randomDisplay = document.getElementById("random-display");
+    randomDisplay.value = randomNumber;
+});
+
+document.getElementById("buttons-ancestor").addEventListener("click", function (event) {
+    const customDisplay = document.getElementById("custom-display");
+    const collectedNumber = event.target.innerText;
+    if (collectedNumber == "C") {
+        customDisplay.value = "";
+    } else if (collectedNumber == "Submit") {
+        if (randomNumber == customDisplay.value) {
+            document.getElementById("matched-massage").style.display = "block";
+            document.getElementById("missmatched-massage").style.display = "none";
+            window.location.href = "myShoppingCart/index.html";
+        }
+        else {
+            document.getElementById("missmatched-massage").style.display = "block";
+            document.getElementById("matched-massage").style.display = "none";
+        }
+        // customDisplay.value == getPin();
     }
     else {
-        var totalProductsPrice = inputValue * 59;
+        customDisplay.value += collectedNumber;
     }
-    productPrice.innerText = totalProductsPrice;
-}
-
-// total calculation
-function total() {
-    const subtotal = document.getElementById("subtotal");
-    const mobileRate = document.getElementById("mobile-rate").innerText;
-    const caseRate = document.getElementById("case-rate").innerText;
-    const subtotalAmount = parseFloat(mobileRate) + parseFloat(caseRate);
-    subtotal.innerText = subtotalAmount;
-    const taxField = document.getElementById("tax");
-    const tax = subtotalAmount * 10 / 100;
-    taxField.innerText = tax;
-    const total = document.getElementById("total")
-    total.innerText = subtotalAmount + tax;
-}
-
-// phone increment
-document.getElementById("phone-increment").addEventListener("click", function () {
-    productPriceCalculator("phone-input", true, "mobile-rate", true);
-    total();
-})
-// phone decrement
-document.getElementById("phone-decrement").addEventListener("click", function () {
-    productPriceCalculator("phone-input", false, "mobile-rate", true);
-    total();
-})
-// case increment
-document.getElementById("case-increment").addEventListener("click", function () {
-    productPriceCalculator("case-input", true, "case-rate", false);
-    total();
-})
-// case decrement
-document.getElementById("case-decrement").addEventListener("click", function () {
-    productPriceCalculator("case-input", false, "case-rate", false);
-    total();
 })
